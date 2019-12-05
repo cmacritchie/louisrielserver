@@ -118,16 +118,11 @@ router.patch('/api/whitelist/:id', async (req, res) => {
     }
 })
 
+/
 router.delete('/api/whiteList/:id', async (req, res)=> {
     try {
-        const whiteListItem = await WhiteList.findByIdAndDelete(req.params.id)
-        const user = await User.findOne({email: whiteListItem.email})
+        const whiteListItem = await WhiteList.findOneAndDelete({ _id:req.params.id})
         
-        await Promise.all([
-            HousePoints.deleteMany({owner: user._id}),
-            User.findOneAndDelete({_id:user._id})
-        ])
-
         if(!whiteListItem){
             res.status(404).send()
         }

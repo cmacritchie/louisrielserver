@@ -56,7 +56,7 @@ passport.use(
                 
                 const newUser = await new User({ googleId: profile.id, 
                                                  name: profile.displayName,
-                                                // email,
+                                                 email,
                                                  whiteListEmailId: whiteList ? whiteList._id : undefined,
                                                  admin
                                                 }).save()

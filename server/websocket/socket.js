@@ -6,7 +6,6 @@ const rootSocket = (io)=> {
 
     //submithouse points
       socket.on('incomingData', function (data) {
-        console.log('received incoming data', data)
         socket.broadcast.emit("outgoingData", { num: data })
       });
 
