@@ -49,8 +49,9 @@ router.patch('/api/admin/:id', async (req, res) => {
 })
 
 router.delete('/api/admin/:id', async (req, res)=> {
+    
     try {
-        const adminItem = await Admin.findByIdAndDelete(req.params.id)
+        const adminItem = await Admin.findOneAndDelete({ _id: req.params.id })
 
         if(!adminItem){
             res.status(404).send()

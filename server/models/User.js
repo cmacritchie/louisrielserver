@@ -28,14 +28,13 @@ const userSchema = new Schema({
 })
 
 userSchema.pre('findOneAndDelete', async function(next) {
-    console.log('at user')
-    console.log(this.getQuery())
     const user = await User.findOne(this.getQuery())
-    console.log('here is the user')
-    console.log(user._id)
-    const housepoint = await HousePoints.deleteMany({ owner: user._id })
-    console.log('das housen poin')
-    console.log(housepoint)
+
+    try {
+        await HousePoints.deleteMany({ owner: user._id })
+    } catch (e) {
+        console.log('no House Points to Delete')
+    }
     next()
 })
 

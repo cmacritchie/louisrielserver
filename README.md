@@ -15,3 +15,9 @@ https://dev.to/captainpandaz/a-socket-io-tutorial-that-isn-t-a-chat-app-with-rea
 use i.o to(user._id page).emit( number) for specific teachers
 
 https://stackoverflow.com/questions/23653617/socket-io-listen-events-in-separate-files-in-node-js
+
+
+
+to do: 
+restrict updates to users entries
+ 

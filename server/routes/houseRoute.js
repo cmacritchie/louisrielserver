@@ -2,11 +2,13 @@ const express = require('express')
 const HousePoints = require('../models/HousePoints')
 const User = require('../models/User')
 const mongoose = require('mongoose')
-const auth = require('../middleware/auth')
+const userAuth = require('../middleware/userAuth')
+const adminAuth = require('../middleware/adminAuth')
+const apexAdmin = require('../middleware/apexAuth')
 
 const router = new express.Router()
 
-router.post('/api/house', async (req, res) => {
+router.post('/api/house', userAuth, async (req, res) => {
     console.log(req.user._id)
     const housePoints = new HousePoints({
         ...req.body,
@@ -54,7 +56,7 @@ router.get('/api/house', async (req, res) => {
 })
 
 //for admin purposes
-router.get('/api/userpoints/:id', async (req, res) => {
+router.get('/api/userpoints/:id', userAuth, async (req, res) => {
     const id = req.params.id
     try {
         const housePoints = await User.aggregate([
