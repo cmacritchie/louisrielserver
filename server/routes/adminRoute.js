@@ -5,7 +5,10 @@ const HousePoints = require('../models/HousePoints')
 const User = require('../models/User')
 const router = new express.Router()
 
-router.post('/api/admin', async (req, res) => {
+const adminAuth = require('../middleware/adminAuth')
+const apexAuth = require('../middleware/apexAuth')
+
+router.post('/api/admin', apexAuth, async (req, res) => {
     
     const admin = new Admin(req.body)
     try{
@@ -16,7 +19,7 @@ router.post('/api/admin', async (req, res) => {
     }
 })
 
-router.get('/api/admin', async (req, res) => {
+router.get('/api/admin', apexAuth, async (req, res) => {
     try {
         const admins = await Admin.find({}).sort({email: -1})
         res.send(admins)
@@ -25,7 +28,7 @@ router.get('/api/admin', async (req, res) => {
     }
 })
 
-router.patch('/api/admin/:id', async (req, res) => {
+router.patch('/api/admin/:id', apexAuth, async (req, res) => {
     delete req.body._id
     const updates = Object.keys(req.body)
     const allowedUpdates = ['email']
@@ -48,7 +51,7 @@ router.patch('/api/admin/:id', async (req, res) => {
     }
 })
 
-router.delete('/api/admin/:id', async (req, res)=> {
+router.delete('/api/admin/:id', apexAuth, async (req, res)=> {
     
     try {
         const adminItem = await Admin.findOneAndDelete({ _id: req.params.id })
@@ -63,7 +66,7 @@ router.delete('/api/admin/:id', async (req, res)=> {
     }
 })
 
-router.post('/api/whitelist', async (req, res) => {
+router.post('/api/whitelist', adminAuth, async (req, res) => {
     const whiteList = new WhiteList(req.body)
 
     try {
@@ -74,7 +77,7 @@ router.post('/api/whitelist', async (req, res) => {
     }
 })
 
-router.get('/api/whitelist', async (req, res) => {
+router.get('/api/whitelist', adminAuth, async (req, res) => {
     try {
         //const whiteList = await WhiteList.find({}).sort({email: -1})
 
@@ -96,7 +99,7 @@ router.get('/api/whitelist', async (req, res) => {
     }
 })
 
-router.patch('/api/whitelist/:id', async (req, res) => {
+router.patch('/api/whitelist/:id', adminAuth, async (req, res) => {
     delete req.body._id
     const updates = Object.keys(req.body)
     const allowedUpdates = ['email']
@@ -120,7 +123,7 @@ router.patch('/api/whitelist/:id', async (req, res) => {
 })
 
 /
-router.delete('/api/whiteList/:id', async (req, res)=> {
+router.delete('/api/whiteList/:id', adminAuth, async (req, res)=> {
     try {
         const whiteListItem = await WhiteList.findOneAndDelete({ _id:req.params.id})
         

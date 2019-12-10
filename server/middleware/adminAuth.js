@@ -3,7 +3,7 @@ module.exports = (req, res, next) => {
       return res.status(401).send({ error: 'You must log in!' });
     }
 
-    if (!req.user.admin){
+    if (!req.user.admin && !req.user.apexAdmin){
         return res.status(401).send({ error: 'unAuthorized Route'})
     }
   

@@ -3,8 +3,9 @@ const HousePoints = require('../models/HousePoints')
 const User = require('../models/User')
 const mongoose = require('mongoose')
 const userAuth = require('../middleware/userAuth')
-const adminAuth = require('../middleware/adminAuth')
-const apexAdmin = require('../middleware/apexAuth')
+// const adminAuth = require('../middleware/adminAuth')
+// const apexAdmin = require('../middleware/apexAuth')
+
 
 const router = new express.Router()
 
@@ -82,12 +83,10 @@ router.get('/api/userpoints/:id', userAuth, async (req, res) => {
 })
 
 
-router.get('/api/house/:id', async (req, res) => {
+router.get('/api/house/:id', userAuth, async (req, res) => {
     const _id = req.params.id
 
     try {
-        //edit later for different teachers
-        // const housePoints = await Sleep.findOne({ _id, owner:req.user._id})
         const housePoints = await HousePoints.findOne({ _id})
 
         if(!housePoints) {
@@ -100,25 +99,31 @@ router.get('/api/house/:id', async (req, res) => {
     }
 })
 
-//fix this later
-router.get('/api/myhouse', async (req, res) => {
-    console.log('in')
-    try {
-        const myhousePoints = await HousePoints.find({owner:req.user._id}).sort({updatedAt: -1})
-        res.send(myhousePoints)
-    } catch (e) {
-        res.status(500).send()
-    }
+
+// router.get('/api/myhouse', async (req, res) => {
+//     console.log('in')
+//     try {
+//         const myhousePoints = await HousePoints.find({owner:req.user._id}).sort({updatedAt: -1})
+//         res.send(myhousePoints)
+//     } catch (e) {
+//         res.status(500).send()
+//     }
     
-})
+// })
 
 //refactor
-router.delete('/api/house/:id', async (req, res) => {
+router.delete('/api/house/:id', userAuth, async (req, res) => {
     try {
         let myhousePoints
 
     //if req.user == admin || apexAdmin 
-    myhousePoints = await HousePoints.findOneAndDelete({_id: req.params.id})
+    if(req.user.admin || req.user.apexAdmin ){
+        console.log('admin delete')
+        myhousePoints = await HousePoints.findOneAndDelete({_id: req.params.id})
+    } else {
+        console.log('user delete')
+        myhousePoints = await HousePoints.findOneAndDelete({_id: req.params.id, owner: req.user._id})
+    }
 
     //else
     //HousePoints.findbyIdandDelete(req.params.id)
