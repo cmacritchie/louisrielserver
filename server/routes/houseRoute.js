@@ -60,21 +60,22 @@ router.get('/api/house', async (req, res) => {
 router.get('/api/userpoints/:id', userAuth, async (req, res) => {
     const id = req.params.id
     try {
+        
         const housePoints = await User.aggregate([
                             { $match: 
                                 { _id: mongoose.Types.ObjectId(id) } 
                             },
-                            { 
-                                $lookup : {
-                                    from: "housepoints",
-                                    localField: "_id",
-                                    foreignField: "owner",
-                                    as: "housePoints"
-                
-                                }
-                            }
-            
-        ])
+                            { $lookup: {
+                                from: 'housepoints',
+                                pipeline: [
+                                    { $match: { owner: mongoose.Types.ObjectId(id) } },
+                                    { $sort: {'updatedAt': -1 }}
+                                ],
+                                as: "housePoints"
+                            }}
+                        ])
+
+
         res.send(housePoints)
     } catch (e) {
         console.log(e)
@@ -114,20 +115,17 @@ router.get('/api/house/:id', userAuth, async (req, res) => {
 //refactor
 router.delete('/api/house/:id', userAuth, async (req, res) => {
     try {
-        let myhousePoints
-
-    //if req.user == admin || apexAdmin 
+    let housePoints
+   
     if(req.user.admin || req.user.apexAdmin ){
         console.log('admin delete')
-        myhousePoints = await HousePoints.findOneAndDelete({_id: req.params.id})
+        housePoints = await HousePoints.findOneAndDelete({_id: req.params.id})
     } else {
         console.log('user delete')
-        myhousePoints = await HousePoints.findOneAndDelete({_id: req.params.id, owner: req.user._id})
+        housePoints = await HousePoints.findOneAndDelete({_id: req.params.id, owner: req.user._id})
     }
 
-    //else
-    //HousePoints.findbyIdandDelete(req.params.id)
-    res.send(myhousePoints)
+    res.send(housePoints)
     } catch (e) {
         res.status(500).send()
     }
@@ -144,12 +142,16 @@ router.patch('/api/house/:id', async (req, res) => {
     }
 
     try {
-        //if admin
-        const housePoints = await HousePoints.findOneAndUpdate({ _id:req.params.id}, req.body, { new: true, runValidators: true})
+        let housePoints
 
-        //if not admin
-        // const housePoints = await HousePoints.findOneAndUpdate({ _id:req.params.id, owner:req.user._id}, req.body, { new: true, runValidators: true})
-
+        if(req.user.admin || req.user.apexAdmin ){
+            console.log('admin delete')
+            housePoints = await HousePoints.findOneAndUpdate({ _id:req.params.id}, req.body, { new: true, runValidators: true})
+        } else {
+            console.log('user delete')
+            housePoints = await HousePoints.findOneAndUpdate({ _id:req.params.id, owner: req.user._id}, req.body, { new: true, runValidators: true})
+        }
+       
         if(!housePoints) {
             return res.status(404).send()
         }

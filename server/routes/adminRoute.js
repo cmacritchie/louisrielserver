@@ -79,7 +79,6 @@ router.post('/api/whitelist', adminAuth, async (req, res) => {
 
 router.get('/api/whitelist', adminAuth, async (req, res) => {
     try {
-        //const whiteList = await WhiteList.find({}).sort({email: -1})
 
         const whiteList = await WhiteList.aggregate([
                             { 
