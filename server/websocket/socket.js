@@ -4,17 +4,19 @@ const rootSocket = (io)=> {
     io.sockets.on('connection', function (socket) {
         console.log("New Client connected")
 
-    //submithouse points
-      socket.on('incomingData', function (data) {
-        socket.broadcast.emit("outgoingData", { num: data })
+      socket.on('postingData', function (data) {
+        socket.broadcast.emit("postedData", { num: data })
       });
 
-    //patchHousePoints
+      socket.on('deletingData', function (data) {
+        socket.broadcast.emit("deletedData", { num: data })
+      });
 
-    //deleteHousePoints
-
-
+      socket.on('patchingData', function(data) {
+        socket.broadcast.emit("patchedData", { num: data })
+      })
 
     });
   }
+
 module.exports = rootSocket;

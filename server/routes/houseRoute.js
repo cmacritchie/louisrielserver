@@ -146,10 +146,10 @@ router.patch('/api/house/:id', async (req, res) => {
 
         if(req.user.admin || req.user.apexAdmin ){
             console.log('admin delete')
-            housePoints = await HousePoints.findOneAndUpdate({ _id:req.params.id}, req.body, { new: true, runValidators: true})
+            housePoints = await HousePoints.findOneAndUpdate({ _id:req.params.id}, req.body, { runValidators: true})
         } else {
             console.log('user delete')
-            housePoints = await HousePoints.findOneAndUpdate({ _id:req.params.id, owner: req.user._id}, req.body, { new: true, runValidators: true})
+            housePoints = await HousePoints.findOneAndUpdate({ _id:req.params.id, owner: req.user._id}, req.body, { runValidators: true})
         }
        
         if(!housePoints) {
