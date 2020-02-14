@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "env-cmd -f ./config/dev.env nodemon server/index.js"
+    "start":"node server/index.js",
+    "dev": "env-cmd -f ./config/dev.env nodemon server/index.js",
+    "dockerdev": "nodemon server/index.js"
   },
   "author": "",
   "license": "ISC",

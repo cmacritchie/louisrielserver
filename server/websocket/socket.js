@@ -2,7 +2,7 @@ const rootSocket = (io)=> {
     
     //connect
     io.sockets.on('connection', function (socket) {
-        console.log("New Client connected")
+        // console.log("New Client connected")
 
       socket.on('postingData', function (data) {
         socket.broadcast.emit("postedData", { num: data })

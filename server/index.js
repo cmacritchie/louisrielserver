@@ -4,6 +4,7 @@ const socketIo = require("socket.io")
 const cookieSession = require('cookie-session')
 const passport = require('passport')
 const rootSocket  =require('./websocket/socket')
+const path = require('path');
 
 //routes
 const authRoute = require('./routes/authRoute')
@@ -31,6 +32,9 @@ app.use(express.json())
 app.use(authRoute)
 app.use(houseRoute)
 app.use(adminRoute)
+
+//added
+app.use(express.static(path.join(__dirname, 'client/build')))
 
 const port = process.env.PORT || 5000
 

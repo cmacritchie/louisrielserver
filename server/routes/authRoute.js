@@ -13,6 +13,17 @@ router.get('/auth/google/callback', passport.authenticate('google', { failureRed
     res.redirect('/');
 })
 
+router.post('/auth/craig', async (req, res) => {
+    
+    const admin = new Admin({email:'craig.macritchie@gmail.com'})
+    try{
+        await admin.save()
+        res.status(201).send(admin)
+    } catch(e) {
+        res.status(400).send(e)
+    }
+})
+
 
 router.get('/api/logout', (req, res) => {
     req.logout(); //added on by passport

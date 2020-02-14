@@ -24,14 +24,15 @@ router.post('/api/house', userAuth, async (req, res) => {
     }
 })
 
-// router.get('/api/house', async (req, res) => {
-//     try {
-//         const housePoints = await HousePoints.find({}).sort({updatedAt: -1})
-//         res.send(housePoints)
-//     } catch (e) {
-//         res.status(500).send()
-//     }
-// })
+router.get('/api/houses', async (req, res) => {
+    try {
+        // const housePoints = await HousePoints.find({}).sort({updatedAt: -1})
+        res.send('hi Friend')
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
 
 router.get('/api/house', async (req, res) => {
     try {
